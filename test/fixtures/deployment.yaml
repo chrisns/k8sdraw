@@ -1,0 +1,102 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: mydeployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: mydeployment
+  template:
+    metadata:
+      labels:
+        name: mydeployment
+    spec:
+      containers:
+      - image: me/myimage:myversion
+        name: mydeployment
+        env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: AWS_ACCESS_KEY_ID
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: AWS_SECRET_ACCESS_KEY
+          - name: REGION
+            valueFrom:
+              configMapKeyRef:
+                name: myconfigmap
+                key: AWS_REGION
+        ports:
+         - name: http
+           containerPort: 3000
+        volumeMounts:
+        - mountPath: /var/lib/mountpoint
+          name: myvolume
+      volumes:
+      - name: myvolume
+        persistentVolumeClaim:
+          claimName: mypvc
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+type: Opaque
+data:
+  AWS_ACCESS_KEY_ID: xxx
+  AWS_SECRET_ACCESS_KEY: yyy
+---
+apiVersion: v1
+kind: Configmap
+metadata:
+  name: myconfigmap
+type: Opaque
+data:
+  AWS_REGION: zzz
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mypvc
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: nfs
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myservice
+spec:
+  ports:
+  - name: web
+    port: 80
+    targetPort: http
+  selector:
+    name: mydeployment
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: myingress
+spec:
+  rules:
+  - host: example.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: myservice
+          servicePort: web
+      - path: /another
+        backend:
+          serviceName: myservice
+          servicePort: web
