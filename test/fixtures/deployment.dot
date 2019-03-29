@@ -1,0 +1,19 @@
+digraph {
+    node [shape=record]
+    
+    mydeployment [label="{Deployment\n \{name: mydeployment\} | {Containers | {{myapp|{image:me/myimage:myversion|{env|{<AWS_ACCESS_KEY_ID>AWS_ACCESS_KEY_ID|<AWS_SECRET_ACCESS_KEY>AWS_SECRET_ACCESS_KEY|<AWS_REGION>AWS_REGION}}|{volumeMounts|<myvolumem>/var/lib/mountpoint}|{Ports|<http>http (8080)}}}} }|{Volumes|{<myvolume>myvolume}}}"]
+    mysecret [label="{Secret\n \{name: mysecret\}|<AWS_ACCESS_KEY_ID>AWS_ACCESS_KEY_ID|<AWS_SECRET_ACCESS_KEY>AWS_SECRET_ACCESS_KEY}"]
+    myconfigmap [label="{ConfigMap\n \{name: myconfigmap\}|<AWS_REGION>AWS_REGION}"]
+    mypvc [label="{PersistentVolumeClaim\n \{name: mypvc\}|{storageClassName|nfs}|{storage|10Gi}}"]
+    myservice [label="{Service\n \{name: myservice\}|{selector|name:mydeployment}|{ports|{<web>web(80)}}}"]
+    myingress [label="{Ingress\n \{name: myingress\}|{example.com|{<root>/|<another>/another}}}"]
+
+    mydeployment:AWS_ACCESS_KEY_ID -> mysecret:AWS_ACCESS_KEY_ID
+    mydeployment:AWS_SECRET_ACCESS_KEY -> mysecret:AWS_SECRET_ACCESS_KEY
+    mydeployment:AWS_REGION -> myconfigmap:AWS_REGION
+    mydeployment:myvolumem -> mydeployment:myvolume 
+    mydeployment:myvolume -> mypvc
+    myservice:web -> mydeployment:http
+    myingress:root -> myservice:web
+    myingress:another -> myservice:web
+}
