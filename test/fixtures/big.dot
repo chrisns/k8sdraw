@@ -1,12 +1,162 @@
 digraph {
-    node [shape=record]
-    
-    mydeployment [label="{Deployment\n \{name: mydeployment\} | {Containers | {{myapp|{image:me/myimage:myversion|{env|{<AWS_ACCESS_KEY_ID>AWS_ACCESS_KEY_ID|<AWS_SECRET_ACCESS_KEY>AWS_SECRET_ACCESS_KEY|<AWS_REGION>AWS_REGION}}|{volumeMounts|<myvolumem>/var/lib/mountpoint}|{Ports|<http>http (8080)}}}} }|{Volumes|{<myvolume>myvolume}}}"]
-    mysecret [label="{Secret\n \{name: mysecret\}|<AWS_ACCESS_KEY_ID>AWS_ACCESS_KEY_ID|<AWS_SECRET_ACCESS_KEY>AWS_SECRET_ACCESS_KEY}"]
-    myconfigmap [label="{ConfigMap\n \{name: myconfigmap\}|<AWS_REGION>AWS_REGION}"]
-    mypvc [label="{PersistentVolumeClaim\n \{name: mypvc\}|{storageClassName|nfs}|{storage|10Gi}}"]
-    myservice [label="{Service\n \{name: myservice\}|{selector|name:mydeployment}|{ports|{<web>web(80)}}}"]
-    myingress [label="{Ingress\n \{name: myingress\}|{example.com|{<root>/|<another>/another}}}"]
+    node [shape=plaintext]
+
+    mydeployment [label=<
+        <table>
+            <tr>
+                <td>Deployment<br/>name: mydeployment</td>
+            </tr>
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td>Containers</td>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td>myapp</td>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <td>image</td>
+                                                    <td>me/myimage:myversion</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>env</td>
+                                                    <td>
+                                                        <table>
+                                                            <tr><td PORT="AWS_ACCESS_KEY_ID">AWS_ACCESS_KEY_ID</td></tr>
+                                                            <tr><td PORT="AWS_SECRET_ACCESS_KEY">AWS_SECRET_ACCESS_KEY</td></tr>
+                                                            <tr><td PORT="AWS_REGION">AWS_REGION</td></tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>volumeMounts</td>
+                                                    <td>
+                                                        <table>
+                                                            <tr><td port="myvolumem">/var/lib/mountpoint</td></tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Ports</td>
+                                                    <td>
+                                                        <table>
+                                                            <tr><td>http (8080)</td></tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Volumes</td>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td PORT="myvolume">myvolume</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+        </table>
+    >];
+
+    mysecret [label=<
+        <table>
+            <tr>
+                <td>Secret<br/>name: mysecret</td>
+            </tr>
+            <tr><td port="AWS_ACCESS_KEY_ID">AWS_ACCESS_KEY_ID</td></tr>
+            <tr><td port="AWS_SECRET_ACCESS_KEY">AWS_SECRET_ACCESS_KEY</td></tr>
+        </table>
+    >]
+
+    myconfigmap [label=<
+        <table>
+            <tr>
+                <td>ConfigMap<br/>name: myconfigmap</td>
+            </tr>
+            <tr><td port="AWS_REGION">AWS_REGION</td></tr>
+        </table>
+    >]
+
+    mypvc [label=<
+        <table>
+            <tr>
+                <td>PersistentVolumeClaim<br/>name: mypvc</td>
+            </tr>
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td>storageClassName</td>
+                            <td>nfs</td>
+                        </tr>
+                        <tr>
+                            <td>storage</td>
+                            <td>10Gi</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    >]
+
+    myservice [label=<
+        <table>
+            <tr>
+                <td>Service<br/>name: myservice</td>
+            </tr>
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td>selector</td>
+                            <td>name:mydeployment</td>
+                        </tr>
+                        <tr>
+                            <td>ports</td>
+                            <td port="web">web(80)</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    >]
+
+    myingress [label=<
+        <table>
+            <tr>
+                <td>Ingress<br/>name: myingress</td>
+            </tr>
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td>example.com</td>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td port="root">/</td>
+                                        <td port="another">another</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    >]
 
     mydeployment:AWS_ACCESS_KEY_ID -> mysecret:AWS_ACCESS_KEY_ID
     mydeployment:AWS_SECRET_ACCESS_KEY -> mysecret:AWS_SECRET_ACCESS_KEY
