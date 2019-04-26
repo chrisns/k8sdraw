@@ -1,0 +1,39 @@
+{
+  "name": "k8sdraw",
+  "version": "1.0.0",
+  "description": "The point of this project is to allow graphical drawings of kubernetes infrastructure.",
+  "main": ".prettierrc.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "ts-node --files index.tsx",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrisns/k8sdraw.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chrisns/k8sdraw/issues"
+  },
+  "homepage": "https://github.com/chrisns/k8sdraw#readme",
+  "devDependencies": {
+    "@types/graphviz": "0.0.30",
+    "@types/js-yaml": "^3.12.1",
+    "@types/node": "^11.13.7",
+    "@types/react": "^16.8.14",
+    "@types/react-dom": "^16.8.4",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "graphviz": "0.0.9",
+    "js-yaml": "^3.13.1",
+    "kubernetes-models": "^0.5.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+}
