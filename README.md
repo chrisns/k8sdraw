@@ -1,4 +1,5 @@
-# k8sdraw
+# k8sdraw - abandoned
+I saw, https://github.com/containership/konstellate and abandoned this project since that answers most my own desires, if you see a benefit in this please let me know
 
 The point of this project is to allow graphical drawings of kubernetes infrastructure.
 
